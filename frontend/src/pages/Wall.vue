@@ -6,14 +6,27 @@
       <article v-for="w in rows" :key="w.id" class="card" @click="$router.push('/wishes/'+w.id)">
         <h3>{{ w.title || '（无标题）' }}</h3>
         <p>{{ w.note }}</p>
-        <span class="tag">{{ w.status }} · {{ w.data_quality }}</span>
+        <p class="tag">{{ w.status }} · {{ w.data_quality }}</p>
+        <p v-if="w.status==='claimed'" class="tag">
+          认领人 {{ w.claimer || '—' }} · 倒计时 {{ fmtCountdown(w.expires_at, tick) }}
+        </p>
+        <p v-if="w.pending_transfer" class="tag transfer-tag">
+          转让中：{{ w.pending_transfer.from_claimer }} → {{ w.pending_transfer.target_claimer }}（确认后倒计时重开满额）
+        </p>
       </article>
     </div>
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { api } from '../api'
+import { fmtCountdown } from '../util'
 const rows = ref([])
-onMounted(async () => { rows.value = await api('/wishes') })
+const tick = ref(Date.now())
+let timer = null
+onMounted(async () => {
+  rows.value = await api('/wishes')
+  timer = setInterval(() => { tick.value = Date.now() }, 1000)
+})
+onUnmounted(() => timer && clearInterval(timer))
 </script>

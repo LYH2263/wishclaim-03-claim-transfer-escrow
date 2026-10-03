@@ -35,3 +35,6 @@ button.ghost { background: transparent; color: var(--ink); border: 1px solid var
 input, textarea { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--line); font: inherit; margin: 6px 0 12px; background: #fff; }
 .menu-btn { position: fixed; left: 16px; top: 16px; z-index: 10; }
 .err { color: #a33; }
+.transfer-tag { color: #b06a5a; }
+.transfer-box { margin-top: 20px; padding: 16px; border: 1px dashed var(--rose); border-radius: 16px; background: #fff3ef; }
+.transfer-box h3 { margin: 0 0 10px; }
