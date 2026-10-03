@@ -1,4 +1,5 @@
 from app.db import connect
+from app.modules.claim_transfer import ensure_schema as ensure_transfer_schema
 
 def init_db():
     c = connect()
@@ -9,6 +10,7 @@ def init_db():
     );
     CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);
     """)
+    ensure_transfer_schema(c)
     if c.execute("SELECT COUNT(*) c FROM wishes").fetchone()["c"] == 0:
         c.executemany(
             "INSERT INTO wishes(title,note,status,claimer,claimed_at,expires_at,data_quality) VALUES (?,?,?,?,?,?,?)",
